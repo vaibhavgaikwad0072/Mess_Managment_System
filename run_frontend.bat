@@ -1,6 +1,6 @@
 @echo off
 TITLE Hostel Mess Management - Frontend
 echo Starting Frontend Server...
-cd frontend
-cmd /c "npm run dev"
+cd /d "%~dp0frontend"
+cmd /k "npm.cmd run dev -- --host"
 pause

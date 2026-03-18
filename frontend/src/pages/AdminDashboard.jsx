@@ -62,12 +62,16 @@ const AdminDashboard = () => {
     const [replyText, setReplyText] = useState('');
 
     useEffect(() => {
-        fetchData();
+        fetchData(true);
+        const interval = setInterval(() => {
+            fetchData(false);
+        }, 5000); // Poll every 5 seconds
+        return () => clearInterval(interval);
     }, []);
 
-    const fetchData = async () => {
+    const fetchData = async (showLoading = true) => {
         try {
-            setLoading(true);
+            if (showLoading) setLoading(true);
             const [complaintRes, feedbackRes] = await Promise.all([
                 getComplaints(),
                 getFeedbacks()
@@ -75,9 +79,10 @@ const AdminDashboard = () => {
             setComplaints(Array.isArray(complaintRes.data) ? complaintRes.data : []);
             setFeedbacks(Array.isArray(feedbackRes.data) ? feedbackRes.data : []);
         } catch (error) {
-            toast.error("Failed to load analytics data");
+            // Only show toast if it's the initial load to prevent spam
+            if (showLoading) toast.error("Failed to load analytics data");
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     };
 

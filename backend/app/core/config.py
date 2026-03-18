@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     # Defaulting to SQLite for easy local setup, but can be changed to postgresql
     SQLALCHEMY_DATABASE_URI: str = "sqlite:///./sql_app.db"
     
+    class Config:
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
     # JWT
     SECRET_KEY: str = "YOUR_SUPER_SECRET_KEY_HERE_CHANGE_IN_PRODUCTION"
     ALGORITHM: str = "HS256"

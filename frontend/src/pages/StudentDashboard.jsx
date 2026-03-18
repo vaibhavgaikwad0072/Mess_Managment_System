@@ -33,12 +33,16 @@ const StudentDashboard = () => {
     const [feedbackForm, setFeedbackForm] = useState({ meal_type: 'breakfast', rating: 5, comment: '' });
 
     useEffect(() => {
-        fetchData();
+        fetchData(true);
+        const interval = setInterval(() => {
+            fetchData(false);
+        }, 5000); // Poll every 5 seconds
+        return () => clearInterval(interval);
     }, []);
 
-    const fetchData = async () => {
+    const fetchData = async (showLoading = true) => {
         try {
-            setLoading(true);
+            if (showLoading) setLoading(true);
             const [menuRes, complaintRes] = await Promise.all([
                 getMenus(),
                 getComplaints()
@@ -68,9 +72,9 @@ const StudentDashboard = () => {
             setComplaints(Array.isArray(complaintRes.data) ? complaintRes.data : []);
         } catch (error) {
             console.error("Dashboard error:", error);
-            toast.error("Failed to load dashboard data");
+            if (showLoading) toast.error("Failed to load dashboard data");
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
         }
     };
 

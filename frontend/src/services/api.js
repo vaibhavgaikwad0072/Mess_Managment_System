@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Use relative path to leverage Vite proxy (fixes connection/protocol issues)
-const API_URL = '/api/v1';
+// Use relative path for Vercel production, otherwise use proxy for local dev
+const API_URL = import.meta.env.PROD ? '/api/v1' : '/api/v1';
 
 const api = axios.create({
   baseURL: API_URL,
